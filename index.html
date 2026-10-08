@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ค่าใช้จ่ายจิณณ์อา</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="จิณณ์อา">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#faf5f1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#faf5f1; --card:#ffffff; --ink:#2d2430; --muted:#8b7f88; --line:#efe6e1; --soft:#f5ece7;
+  --accent:#e0607a; --accent-2:#f29a7b; --accent-ink:#ffffff; --accent-soft:#fde8ec;
+  --dad:#4f7fe0; --dad-soft:#e6eefc; --mom:#e0607a; --mom-soft:#fde8ec;
+  --up:#c8453f; --down:#2f9a6b; --shadow:0 1px 2px rgba(60,30,40,.05),0 6px 20px rgba(60,30,40,.06);
+  --display:"Prompt","IBM Plex Sans Thai",system-ui,sans-serif;
+  --body:"IBM Plex Sans Thai",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17131a; --card:#221c25; --ink:#f1e9ee; --muted:#a395a0; --line:#332a36; --soft:#2a232d;
+  --accent:#f07a92; --accent-2:#f5a68a; --accent-ink:#1d1418; --accent-soft:#3a2530;
+  --dad:#7ea3f0; --dad-soft:#24304a; --mom:#f07a92; --mom-soft:#3a2530;
+  --up:#ef7d76; --down:#5cc396; --shadow:none; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17131a; --card:#221c25; --ink:#f1e9ee; --muted:#a395a0; --line:#332a36; --soft:#2a232d;
+  --accent:#f07a92; --accent-2:#f5a68a; --accent-ink:#1d1418; --accent-soft:#3a2530;
+  --dad:#7ea3f0; --dad-soft:#24304a; --mom:#f07a92; --mom-soft:#3a2530;
+  --up:#ef7d76; --down:#5cc396; --shadow:none; color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+.app{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 8px) 16px calc(env(safe-area-inset-bottom,0px) + 104px)}
+.num{font-variant-numeric:tabular-nums}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 6px}
+.top h1{font-family:var(--display);font-weight:600;font-size:1.55rem;margin:0;line-height:1.2}
+.kid{display:flex;align-items:center;gap:12px;min-width:0}
+.avatar{--s:46px;width:var(--s);height:var(--s);border-radius:50%;padding:2.5px;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex:none;position:relative;display:grid;place-items:center}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--bg);display:block;background:var(--soft)}
+.avatar.big{--s:64px}
+.avatar.huge{--s:150px;padding:4px;box-shadow:0 14px 34px rgba(224,96,122,.32)}
+.avatar.huge img{border-width:5px}
+.avatar.nophoto img{display:none}
+.avatar.nophoto::before{content:"🍼";font-size:calc(var(--s) * .45)}
+.avatar .heart{position:absolute;right:-3px;bottom:-1px;width:24px;height:24px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:.72rem;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.avatar.huge .heart{width:40px;height:40px;font-size:1.2rem;right:4px;bottom:6px}
+.float{position:absolute;font-size:1.3rem;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.top .sub{color:var(--muted);font-size:.85rem}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;padding:5px 10px;border-radius:99px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.pill.ok i{background:var(--down)} .pill.err{color:var(--up)} .pill.err i{background:var(--up)}
+.pill.busy i{background:var(--accent-2);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+
+/* month switcher */
+.month{display:flex;align-items:center;justify-content:space-between;margin:10px 0 14px}
+.month b{font-family:var(--display);font-weight:500;font-size:1.1rem}
+.iconbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--card);box-shadow:var(--shadow);font-size:1.2rem;color:var(--muted)}
+.iconbtn:disabled{opacity:.35}
+
+/* cards */
+.card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.card h2{font-family:var(--display);font-weight:500;font-size:1rem;margin:0 0 12px;display:flex;justify-content:space-between;align-items:baseline}
+.card h2 small{font-family:var(--body);font-weight:400;color:var(--muted);font-size:.8rem}
+.hero{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.12)}
+.hero .label{font-size:.9rem;opacity:.9}
+.hero .big{font-family:var(--display);font-weight:600;font-size:2.6rem;line-height:1.15;margin:2px 0 4px;letter-spacing:-.01em}
+.hero .cmp{display:inline-block;font-size:.82rem;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:99px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;position:relative;z-index:1}
+.split div{background:rgba(255,255,255,.18);border-radius:14px;padding:8px 12px;font-size:.82rem}
+.split b{display:block;font-family:var(--display);font-weight:500;font-size:1.1rem}
+
+/* category bars */
+.catrow{display:grid;grid-template-columns:40px 1fr auto;gap:4px 12px;align-items:center;padding:7px 0}
+.catrow .ic{grid-row:span 2}
+.catrow .nm{font-weight:500;font-size:.95rem}
+.catrow .amt{font-family:var(--display);font-weight:500;text-align:right}
+.catrow .bar{grid-column:2/4;height:6px;background:var(--soft);border-radius:9px;overflow:hidden}
+.catrow .bar i{display:block;height:100%;border-radius:9px}
+.catrow .pct{color:var(--muted);font-size:.78rem;font-weight:400;margin-left:6px}
+.ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:1.25rem;flex:none}
+
+/* entry list */
+.day{display:flex;justify-content:space-between;color:var(--muted);font-size:.82rem;margin:16px 4px 6px}
+.list{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.item{display:flex;align-items:center;gap:12px;padding:12px 14px;width:100%;text-align:left}
+.item+.item{border-top:1px solid var(--line)}
+.item:active{background:var(--soft)}
+.item .mid{flex:1;min-width:0}
+.item .t{font-weight:500;font-size:.95rem}
+.item .n{color:var(--muted);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .r{text-align:right}
+.item .a{font-family:var(--display);font-weight:500}
+.who{display:inline-block;font-size:.7rem;padding:1px 8px;border-radius:99px;font-weight:500}
+.who.dad{background:var(--dad-soft);color:var(--dad)} .who.mom{background:var(--mom-soft);color:var(--mom)}
+.pend{font-size:.7rem;color:var(--accent-2)}
+.empty{text-align:center;color:var(--muted);padding:34px 16px}
+.empty .e{font-size:2.4rem}
+
+/* history filters */
+.search{width:100%;padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);outline:none}
+.search:focus{border-color:var(--accent)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:none;margin:0 -16px;padding-inline:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 14px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-size:.88rem;white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--soft);border-radius:12px;padding:3px;gap:3px}
+.seg button{padding:8px;border-radius:10px;font-size:.9rem;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.mhead{display:flex;justify-content:space-between;align-items:baseline;margin:20px 4px 8px}
+.mhead b{font-family:var(--display);font-weight:500}
+.mhead span{font-family:var(--display);font-weight:500;color:var(--accent)}
+
+/* summary chart */
+.chart{display:flex;align-items:flex-end;gap:6px;height:190px}
+.chart button{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;position:relative}
+.chart .b{width:100%;max-width:26px;border-radius:8px 8px 4px 4px;background:var(--accent-soft);min-height:3px;transition:height .3s}
+.chart .on .b{background:linear-gradient(180deg,var(--accent-2),var(--accent))}
+.chart small{font-size:.68rem;color:var(--muted);white-space:nowrap}
+.chart .on small{color:var(--ink);font-weight:600}
+.chart .v{font-size:.7rem;font-weight:600;color:var(--accent);white-space:nowrap}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tile{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
+.tile .k{font-size:.78rem;color:var(--muted)}
+.tile .v{font-family:var(--display);font-weight:600;font-size:1.3rem}
+.tile .s{font-size:.75rem;color:var(--muted)}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;width:100%;text-align:left}
+.mrow+.mrow{border-top:1px solid var(--line)}
+.mrow .d{font-size:.78rem}
+.up{color:var(--up)} .down{color:var(--down)}
+
+/* tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:6px 8px calc(env(safe-area-inset-bottom,0px) + 6px)}
+.tabs nav{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:center}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.7rem;color:var(--muted);padding:4px 0}
+.tabs button svg{width:24px;height:24px}
+.tabs button.on{color:var(--accent)}
+.tabs .add{width:58px;height:58px;margin:-26px auto 0;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 8px 20px rgba(224,96,122,.35);display:grid;place-items:center}
+.tabs .add svg{width:28px;height:28px}
+
+/* bottom sheet */
+.backdrop{position:fixed;inset:0;background:rgba(30,15,25,.38);z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+.backdrop.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;max-width:520px;margin:0 auto;background:var(--bg);border-radius:26px 26px 0 0;max-height:94vh;overflow-y:auto;transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding:8px 16px calc(env(safe-area-inset-bottom,0px) + 18px)}
+.sheet.show{transform:none}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:4px auto 8px}
+.shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.shead h3{font-family:var(--display);font-weight:500;font-size:1.15rem;margin:0}
+.amount{display:flex;align-items:baseline;justify-content:center;gap:6px;background:var(--card);border-radius:22px;padding:14px;box-shadow:var(--shadow)}
+.amount span{font-family:var(--display);font-size:1.8rem;color:var(--muted)}
+.amount input{width:1.6ch;min-width:1.6ch;max-width:80%;border:0;outline:none;background:none;font-family:var(--display);font-weight:600;font-size:2.6rem;text-align:center;padding:0}
+.recent{display:flex;gap:8px;overflow-x:auto;margin:12px -16px 0;padding:0 16px;scrollbar-width:none}
+.recent::-webkit-scrollbar{display:none}
+.recent button{flex:none;background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:6px 10px;font-size:.8rem;text-align:left}
+.recent b{font-weight:600}
+.lbl{display:block;font-size:.82rem;color:var(--muted);margin:16px 4px 8px}
+.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cgrid button{background:var(--card);border-radius:16px;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.78rem;border:2px solid transparent;box-shadow:var(--shadow);line-height:1.2;text-align:center}
+.cgrid button .ic{width:36px;height:36px;font-size:1.15rem}
+.cgrid button.on{border-color:var(--accent);background:var(--accent-soft)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);outline:none;min-height:48px;-webkit-appearance:none;appearance:none}
+.field:focus{border-color:var(--accent)}
+.btn{display:block;width:100%;padding:15px;border-radius:16px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:1.05rem;margin-top:20px}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:var(--soft);color:var(--ink);font-weight:500;margin-top:10px}
+.btn.danger{background:none;color:var(--up);font-weight:500;margin-top:6px}
+.btn:disabled{opacity:.5}
+.err{color:var(--up);font-size:.85rem;margin:10px 4px 0;min-height:1em}
+
+/* settings */
+.set h2{margin-bottom:6px}
+.set p{color:var(--muted);font-size:.85rem;margin:4px 0 12px}
+.kv{display:flex;justify-content:space-between;padding:8px 0;font-size:.9rem}
+.kv span:first-child{color:var(--muted)}
+
+/* welcome */
+.welcome{min-height:80vh;display:flex;flex-direction:column;justify-content:center;text-align:center;gap:6px}
+.welcome .photo{position:relative;width:180px;margin:0 auto 14px;display:grid;place-items:center}
+.welcome h1{font-family:var(--display);font-weight:600;font-size:1.7rem;margin:0}
+.welcome p{color:var(--muted);margin:0 0 22px}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pick button{background:var(--card);border-radius:22px;padding:22px 10px;box-shadow:var(--shadow);font-family:var(--display);font-size:1.2rem;display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid transparent}
+.pick button span{font-size:2.6rem}
+.pick button:active{border-color:var(--accent)}
+.note{background:var(--accent-soft);color:var(--ink);border-radius:14px;padding:10px 14px;font-size:.85rem;margin-top:18px}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:.9rem;opacity:0;transition:.25s;z-index:40;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<div class="tabs" id="tabs" hidden>
+  <nav>
+    <button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>หน้าหลัก</button>
+    <button data-tab="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>ประวัติ</button>
+    <button class="add" id="addBtn" aria-label="เพิ่มรายการ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button data-tab="summary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V12M10 20V5M15 20v-9M20 20v-5"/></svg>สรุป</button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>ตั้งค่า</button>
+  </nav>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const VERSION = "1.1";
+const CATS = [
+  { name: "นม", icon: "🍼", color: "#5b8def" },
+  { name: "แพมเพิส", icon: "🧷", color: "#e0607a" },
+  { name: "ทิชชู", icon: "🧻", color: "#9c7cdb", subs: ["เปียก", "แห้ง"] },
+  { name: "ครีมทาผิว", icon: "🧴", color: "#e9a23b" },
+  { name: "ครีมอาบน้ำ", icon: "🛁", color: "#3fb5a8" },
+  { name: "อาหารเสริม", icon: "💊", color: "#e07a4f" },
+  { name: "ขนม", icon: "🍪", color: "#b8875a" },
+  { name: "อื่นๆ", icon: "📦", color: "#8e8a99" },
+];
+const CAT = Object.fromEntries(CATS.map(c => [c.name, c]));
+const MONTHS = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+const MON = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const DAYS = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
+
+// ---------- storage (#demo uses its own keys so it never mixes with real data) ----------
+const DEMO = location.hash === "#demo";
+const NS = DEMO ? "jn_demo_" : "jn_";
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem(NS + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(NS + k, JSON.stringify(v)); } catch {} },
+};
+let cfg = LS.get("cfg", { me: "", url: "", pin: "" });
+let cache = LS.get("cache", []);    // server snapshot (shared mode) or the data itself (single-device mode)
+let outbox = LS.get("outbox", []);  // changes not yet confirmed by the server; append-only
+let lastSync = LS.get("lastSync", 0);
+const persist = () => { LS.set("cfg", cfg); LS.set("cache", cache); LS.set("outbox", outbox); LS.set("lastSync", lastSync); };
+
+// ---------- helpers ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = n => "฿" + (Math.round(n * 100) / 100).toLocaleString("th-TH", { maximumFractionDigits: 2 });
+const pad = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => ymd(new Date());
+const ym = s => s.slice(0, 7);
+const addMonth = (m, k) => { const [y, mo] = m.split("-").map(Number); const d = new Date(y, mo - 1 + k, 1); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; };
+const monthName = m => { const [y, mo] = m.split("-").map(Number); return `${MONTHS[mo - 1]} ${y + 543}`; };
+const monShort = m => MON[Number(m.slice(5)) - 1];
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const who = b => b === "พ่อ" ? `<span class="who dad">พ่อ</span>` : b === "แม่" ? `<span class="who mom">แม่</span>` : "";
+const catOf = n => CAT[n] || CAT["อื่นๆ"];
+const icon = c => `<span class="ic" style="background:${c.color}22">${c.icon}</span>`;
+const sum = list => list.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+function dayLabel(s) {
+  const [y, m, d] = s.split("-").map(Number);
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const diff = Math.round((t - new Date(y, m - 1, d)) / 864e5);
+  const base = `${DAYS[new Date(y, m - 1, d).getDay()]} ${d} ${MON[m - 1]}`;
+  return diff === 0 ? `วันนี้ · ${base}` : diff === 1 ? `เมื่อวาน · ${base}` : base;
+}
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1800); }
+
+// what the user sees = last server snapshot + changes still waiting to be sent
+function entries() {
+  const map = new Map(cache.map(e => [e.id, { ...e }]));
+  const pending = new Set();
+  for (const op of outbox) {
+    if (op.op === "delete") { map.delete(op.id); pending.delete(op.id); }
+    else { map.set(op.entry.id, { ...op.entry }); pending.add(op.entry.id); }
+  }
+  return [...map.values()].map(e => (e._pending = pending.has(e.id), e))
+    .sort((a, b) => b.date.localeCompare(a.date) || (b.createdAt || 0) - (a.createdAt || 0));
+}
+
+// ---------- sync ----------
+const shared = () => !!cfg.url;
+let syncing = false, syncState = "idle", syncErr = "";
+function change(op) {
+  if (shared()) outbox.push(op);
+  else if (op.op === "delete") cache = cache.filter(e => e.id !== op.id);
+  else cache = [...cache.filter(e => e.id !== op.entry.id), op.entry];
+  persist(); render(); setTimeout(sync, 200);
+}
+async function sync() {
+  if (!shared() || syncing) return;
+  if (!navigator.onLine) { syncState = "err"; syncErr = "ไม่มีอินเทอร์เน็ต"; return renderPill(); }
+  syncing = true; syncState = "busy"; renderPill();
+  const sent = outbox.length;
+  try {
+    const r = await fetch(cfg.url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ pin: cfg.pin, ops: outbox.slice(0, sent) }) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || "เซิร์ฟเวอร์ตอบผิดพลาด");
+    cache = j.entries; outbox = outbox.slice(sent); lastSync = Date.now();
+    syncState = "ok"; syncErr = "";
+  } catch (err) {
+    syncState = "err"; syncErr = err instanceof SyntaxError || err instanceof TypeError ? "เชื่อมต่อไม่ได้ (ไม่มีเน็ต หรือลิงก์ไม่ถูก)" : err.message;
+  }
+  syncing = false; persist(); render();
+  if (syncState === "ok" && outbox.length) sync();
+  return syncState === "ok";
+}
+function pillHtml() {
+  if (!shared()) return `<span class="pill"><i></i>เครื่องเดียว</span>`;
+  const n = outbox.length;
+  if (syncState === "busy") return `<span class="pill busy"><i></i>ซิงก์…</span>`;
+  if (syncState === "err") return `<span class="pill err"><i></i>${n ? `รอส่ง ${n}` : "ออฟไลน์"}</span>`;
+  return `<span class="pill ok"><i></i>${n ? `รอส่ง ${n}` : "ตรงกันแล้ว"}</span>`;
+}
+function renderPill() { const p = $("#pill"); if (p) p.innerHTML = pillHtml(); }
+
+// ---------- state ----------
+let tab = "home", month = ym(today());
+let filt = { q: "", cat: "", by: "" };
+
+// ---------- views ----------
+function itemHtml(e) {
+  const c = catOf(e.cat);
+  const title = e.cat + (e.sub ? ` (${e.sub})` : "");
+  const sub = [e.note, e.qty ? `${e.qty} ชิ้น` : ""].filter(Boolean).join(" · ");
+  return `<button class="item" data-edit="${esc(e.id)}">${icon(c)}
+    <div class="mid"><div class="t">${esc(title)}</div><div class="n">${esc(sub) || "&nbsp;"}</div></div>
+    <div class="r"><div class="a num">${money(e.amount)}</div><div>${e._pending ? `<span class="pend">รอส่ง</span> ` : ""}${who(e.by)}</div></div></button>`;
+}
+function groupedByDay(list) {
+  if (!list.length) return "";
+  const days = new Map();
+  list.forEach(e => (days.get(e.date) || days.set(e.date, []).get(e.date)).push(e));
+  return [...days].map(([d, l]) => `<div class="day"><span>${dayLabel(d)}</span><span class="num">${money(sum(l))}</span></div>
+    <div class="list">${l.map(itemHtml).join("")}</div>`).join("");
+}
+const kidPhoto = () => LS.get("photo", "") || "jinna.jpg"; // a photo picked in settings stays on this phone only
+const avatar = (cls = "") => `<span class="avatar ${cls}"><img src="${esc(kidPhoto())}" alt="จิณณ์อา" onerror="this.parentNode.classList.add('nophoto')">${cls ? `<span class="heart">💗</span>` : ""}</span>`;
+function header(title, sub, big) {
+  return `<div class="top"><div class="kid">${avatar(big ? "big" : "")}<div><h1>${title}</h1><div class="sub">${sub}</div></div></div><div id="pill">${pillHtml()}</div></div>`;
+}
+
+function viewHome() {
+  const all = entries();
+  const cur = all.filter(e => ym(e.date) === month);
+  const prev = all.filter(e => ym(e.date) === addMonth(month, -1));
+  const total = sum(cur), ptotal = sum(prev);
+  let cmp = "";
+  if (ptotal > 0) {
+    const d = total - ptotal, p = Math.round(Math.abs(d) / ptotal * 100);
+    cmp = d === 0 ? "เท่ากับเดือนก่อน" : `${d > 0 ? "▲ มากกว่า" : "▼ น้อยกว่า"}เดือนก่อน ${money(Math.abs(d))} (${p}%)`;
+  } else if (prev.length === 0 && total > 0) cmp = "เดือนก่อนยังไม่มีรายการ";
+  const byCat = CATS.map(c => ({ c, v: sum(cur.filter(e => catOf(e.cat) === c)) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+  const max = byCat[0]?.v || 1;
+  const isNow = month === ym(today());
+  return header("จิณณ์อา", "ค่าใช้จ่ายของหนู", true) + `
+  <div class="month"><button class="iconbtn" data-m="-1" aria-label="เดือนก่อน">‹</button><b>${monthName(month)}</b>
+    <button class="iconbtn" data-m="1" aria-label="เดือนถัดไป" ${isNow ? "disabled" : ""}>›</button></div>
+  <div class="card hero">
+    <div class="label">ใช้ไปทั้งหมด${isNow ? "เดือนนี้" : ""} · ${cur.length} รายการ</div>
+    <div class="big num">${money(total)}</div>
+    ${cmp ? `<span class="cmp">${cmp}</span>` : ""}
+    <div class="split"><div>พ่อบันทึก<b class="num">${money(sum(cur.filter(e => e.by === "พ่อ")))}</b></div>
+      <div>แม่บันทึก<b class="num">${money(sum(cur.filter(e => e.by === "แม่")))}</b></div></div>
+  </div>
+  ${byCat.length ? `<div class="card"><h2>แยกตามหมวด <small>แตะเพื่อดูรายการ</small></h2>
+    ${byCat.map(({ c, v }) => `<button class="catrow" style="width:100%;text-align:left" data-cat="${c.name}">${icon(c)}<span class="nm">${c.name}<span class="pct">${Math.round(v / total * 100)}%</span></span>
+      <span class="amt num">${money(v)}</span><span class="bar"><i style="width:${v / max * 100}%;background:${c.color}"></i></span></button>`).join("")}
+  </div>` : ""}
+  ${cur.length ? `<h2 style="font-family:var(--display);font-weight:500;font-size:1rem;margin:20px 4px 0">รายการในเดือนนี้</h2>${groupedByDay(cur)}`
+    : `<div class="card empty"><div class="e">🧸</div>ยังไม่มีรายการใน${monthName(month)}<br>กดปุ่ม <b>+</b> ด้านล่างเพื่อเพิ่ม</div>`}`;
+}
+
+function viewHistory() {
+  const q = filt.q.trim().toLowerCase();
+  const list = entries().filter(e => (!filt.cat || e.cat === filt.cat) && (!filt.by || e.by === filt.by)
+    && (!q || `${e.cat} ${e.sub} ${e.note}`.toLowerCase().includes(q)));
+  const months = new Map();
+  list.forEach(e => (months.get(ym(e.date)) || months.set(ym(e.date), []).get(ym(e.date))).push(e));
+  return header("ประวัติ", `ทั้งหมด ${list.length} รายการ · ${money(sum(list))}`) + `
+  <input class="search" id="q" type="search" placeholder="ค้นหา เช่น ยี่ห้อ ร้าน หมายเหตุ" value="${esc(filt.q)}">
+  <div class="chips"><button class="chip ${!filt.cat ? "on" : ""}" data-fcat="">ทุกหมวด</button>
+    ${CATS.map(c => `<button class="chip ${filt.cat === c.name ? "on" : ""}" data-fcat="${c.name}">${c.icon} ${c.name}</button>`).join("")}</div>
+  <div class="seg" style="margin-top:8px">${["", "พ่อ", "แม่"].map(b => `<button class="${filt.by === b ? "on" : ""}" data-fby="${b}">${b ? `${b}บันทึก` : "ทุกคน"}</button>`).join("")}</div>
+  ${list.length ? [...months].map(([m, l]) => `<div class="mhead"><b>${monthName(m)}</b><span class="num">${money(sum(l))}</span></div>
+    <div class="list">${l.map(itemHtml).join("")}</div>`).join("")
+    : `<div class="card empty" style="margin-top:16px"><div class="e">🔍</div>ไม่พบรายการที่ตรงกับตัวกรอง</div>`}`;
+}
+
+function viewSummary() {
+  const all = entries();
+  const now = ym(today());
+  const ms = Array.from({ length: 12 }, (_, i) => addMonth(now, i - 11));
+  const tot = Object.fromEntries(ms.map(m => [m, sum(all.filter(e => ym(e.date) === m))]));
+  const max = Math.max(1, ...Object.values(tot));
+  const withData = ms.filter(m => tot[m] > 0);
+  const avg = withData.length ? sum(withData.map(m => ({ amount: tot[m] }))) / withData.length : 0;
+  const year = now.slice(0, 4);
+  const yearList = all.filter(e => e.date.startsWith(year));
+  const top = withData.slice().sort((a, b) => tot[b] - tot[a])[0];
+  const byCat = CATS.map(c => ({ c, v: sum(yearList.filter(e => catOf(e.cat) === c)) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+  const ytotal = sum(yearList);
+  const allMonths = [...new Set(all.map(e => ym(e.date)))].sort().reverse();
+  return header("สรุปรายเดือน", "แตะแท่งกราฟเพื่อเปิดดูเดือนนั้น") + `
+  <div class="card"><h2>12 เดือนล่าสุด <small>${monShort(ms[0])} ${(Number(ms[0].slice(0, 4)) + 543) % 100} – ${monShort(now)} ${(Number(now.slice(0, 4)) + 543) % 100}</small></h2>
+    <div class="chart">${ms.map(m => `<button data-go="${m}" class="${m === month ? "on" : ""}" aria-label="${monthName(m)} ${money(tot[m])}">
+      ${m === month && tot[m] ? `<span class="v num">${money(tot[m])}</span>` : ""}
+      <span class="b" style="height:calc((100% - 50px) * ${tot[m] / max})"></span><small>${monShort(m)}</small></button>`).join("")}</div>
+  </div>
+  <div class="tiles">
+    <div class="tile"><div class="k">เฉลี่ยต่อเดือน</div><div class="v num">${money(Math.round(avg))}</div><div class="s">จาก ${withData.length} เดือนที่มีรายการ</div></div>
+    <div class="tile"><div class="k">ทั้งปี ${Number(year) + 543}</div><div class="v num">${money(ytotal)}</div><div class="s">${yearList.length} รายการ</div></div>
+    <div class="tile"><div class="k">เดือนที่ใช้มากสุด</div><div class="v num">${top ? money(tot[top]) : "–"}</div><div class="s">${top ? monthName(top) : "ยังไม่มีข้อมูล"}</div></div>
+    <div class="tile"><div class="k">หมวดที่ใช้มากสุดปีนี้</div><div class="v">${byCat[0] ? `${byCat[0].c.icon} ${byCat[0].c.name}` : "–"}</div><div class="s num">${byCat[0] ? `${money(byCat[0].v)} · ${Math.round(byCat[0].v / ytotal * 100)}%` : ""}</div></div>
+  </div>
+  ${byCat.length ? `<div class="card"><h2>ปี ${Number(year) + 543} แยกตามหมวด</h2>
+    ${byCat.map(({ c, v }) => `<div class="catrow">${icon(c)}<span class="nm">${c.name}<span class="pct">${Math.round(v / ytotal * 100)}%</span></span>
+      <span class="amt num">${money(v)}</span><span class="bar"><i style="width:${v / byCat[0].v * 100}%;background:${c.color}"></i></span></div>`).join("")}</div>` : ""}
+  <div class="card"><h2>ทุกเดือนที่บันทึกไว้</h2>
+    ${allMonths.length ? allMonths.map((m, i) => {
+      const t = sum(all.filter(e => ym(e.date) === m)), p = sum(all.filter(e => ym(e.date) === addMonth(m, -1)));
+      const d = p ? Math.round((t - p) / p * 100) : null;
+      return `<button class="mrow" data-go="${m}"><span>${monthName(m)}</span><span style="text-align:right"><b class="num">${money(t)}</b><br>
+        <span class="d ${d > 0 ? "up" : d < 0 ? "down" : ""}">${d == null ? "&nbsp;" : d === 0 ? "เท่าเดิม" : `${d > 0 ? "▲" : "▼"} ${Math.abs(d)}%`}</span></span></button>`;
+    }).join("") : `<div class="empty">ยังไม่มีข้อมูล</div>`}
+  </div>`;
+}
+
+function viewSettings() {
+  const n = entries().length;
+  const joinLink = shared() ? `${location.origin}${location.pathname}#u=${encodeURIComponent(cfg.url)}&p=${encodeURIComponent(cfg.pin)}` : "";
+  const other = cfg.me === "พ่อ" ? "แม่" : "พ่อ";
+  return header("ตั้งค่า", `เวอร์ชัน ${VERSION}${DEMO ? " · โหมดตัวอย่าง" : ""}`) + `
+  <div class="card set"><h2>ฉันคือ</h2><p>รายการที่เพิ่มจากเครื่องนี้จะติดชื่อนี้ให้อัตโนมัติ</p>
+    <div class="seg">${["พ่อ", "แม่"].map(b => `<button class="${cfg.me === b ? "on" : ""}" data-me="${b}">${b === "พ่อ" ? "👨" : "👩"} ${b}</button>`).join("")}</div></div>
+  <div class="card set"><h2>รูปของลูก</h2>
+    <div style="display:flex;align-items:center;gap:16px">${avatar("big")}<div style="flex:1">
+      <button class="btn ghost" id="pickPhoto" style="margin:0">เปลี่ยนรูป</button>
+      ${LS.get("photo", "") ? `<button class="btn danger" id="resetPhoto" style="margin:4px 0 0;padding:8px">ใช้รูปเริ่มต้น</button>` : ""}</div></div>
+    <p style="margin:12px 0 0">รูปที่เปลี่ยนตรงนี้เก็บไว้ในเครื่องนี้เท่านั้น อีกเครื่องต้องเปลี่ยนเอง</p>
+    <input type="file" id="photoIn" accept="image/*" hidden></div>
+  <div class="card set"><h2>ใช้ข้อมูลร่วมกันพ่อกับแม่</h2>
+    ${shared() ? `<p>เชื่อมต่อแล้ว ทั้งสองเครื่องเห็นยอดชุดเดียวกัน</p>
+      <div class="kv"><span>ซิงก์ล่าสุด</span><span>${lastSync ? new Date(lastSync).toLocaleString("th-TH", { dateStyle: "medium", timeStyle: "short" }) : "–"}</span></div>
+      <div class="kv"><span>รอส่ง</span><span>${outbox.length} รายการ</span></div>
+      ${syncState === "err" ? `<div class="err">${esc(syncErr)}</div>` : ""}
+      <button class="btn" id="share">ส่งลิงก์ให้${other}ติดตั้ง</button>
+      <button class="btn ghost" id="syncNow">ซิงก์เดี๋ยวนี้</button>
+      <button class="btn danger" id="disconnect">เลิกเชื่อมต่อ (เก็บข้อมูลไว้ในเครื่องนี้)</button>
+      <input type="hidden" id="joinLink" value="${esc(joinLink)}">`
+    : `<p>ตอนนี้ข้อมูลอยู่ในเครื่องนี้เครื่องเดียว ใส่ลิงก์เว็บแอปจาก Google Apps Script กับรหัสครอบครัวเพื่อให้${other}เห็นด้วย (ดูวิธีในไฟล์ วิธีติดตั้ง)</p>
+      <label class="lbl">ลิงก์เว็บแอป (ลงท้ายด้วย /exec)</label>
+      <input class="field" id="url" placeholder="https://script.google.com/macros/s/…/exec" autocapitalize="off" autocorrect="off">
+      <label class="lbl">รหัสครอบครัว (PIN)</label>
+      <input class="field" id="pin" type="password" autocomplete="off">
+      <div class="err" id="cerr"></div>
+      <button class="btn" id="connect">เชื่อมต่อ</button>`}
+  </div>
+  <div class="card set"><h2>ข้อมูล</h2>
+    <div class="kv"><span>รายการทั้งหมด</span><span>${n} รายการ</span></div>
+    <button class="btn ghost" id="csv">ดาวน์โหลดเป็นไฟล์ Excel (CSV)</button></div>`;
+}
+
+function viewWelcome() {
+  const joining = !!pendingJoin;
+  return `<div class="welcome"><div class="photo">${avatar("huge")}<span class="float" style="left:0;top:18px">🎀</span><span class="float" style="right:2px;top:0;animation-delay:1s">✨</span></div>
+    <h1>ค่าใช้จ่ายจิณณ์อา</h1><p>บันทึกง่าย พ่อกับแม่เห็นยอดเดียวกัน</p>
+    <div style="font-weight:500;margin-bottom:10px">ใครใช้เครื่องนี้คะ</div>
+    <div class="pick"><button data-pick="พ่อ"><span>👨</span>พ่อ</button><button data-pick="แม่"><span>👩</span>แม่</button></div>
+    ${joining ? `<div class="note">🔗 ลิงก์นี้จะเชื่อมข้อมูลกับอีกเครื่องให้อัตโนมัติ</div>` : ""}</div>`;
+}
+
+function render() {
+  const app = $("#app");
+  const welcome = !cfg.me;
+  $("#tabs").hidden = welcome;
+  const y = window.scrollY, f = document.activeElement?.id === "q" ? $("#q").selectionStart : null;
+  app.innerHTML = welcome ? viewWelcome() : { home: viewHome, history: viewHistory, summary: viewSummary, settings: viewSettings }[tab]();
+  document.querySelectorAll(".tabs [data-tab]").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  window.scrollTo(0, y);
+  if (f != null && $("#q")) { $("#q").focus(); $("#q").setSelectionRange(f, f); } // keep typing while a sync redraws
+}
+function go(t) { tab = t; render(); window.scrollTo(0, 0); }
+
+// ---------- add / edit sheet ----------
+let form = null;
+function openSheet(entry) {
+  form = entry ? { ...entry, isNew: false } : { id: uid(), date: today(), cat: "", sub: "", amount: "", qty: "", note: "", by: cfg.me, isNew: true };
+  drawSheet();
+  $("#backdrop").classList.add("show"); $("#sheet").classList.add("show");
+  if (form.isNew) setTimeout(() => $("#amt")?.focus(), 300);
+}
+function closeSheet() { $("#backdrop").classList.remove("show"); $("#sheet").classList.remove("show"); form = null; }
+function recentPicks() {
+  const seen = new Set(), out = [];
+  for (const e of entries()) {
+    const k = `${e.cat}|${e.sub}|${e.amount}|${e.note}`;
+    if (!seen.has(k)) { seen.add(k); out.push(e); }
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+function drawSheet() {
+  const f = form, c = CAT[f.cat];
+  const picks = f.isNew ? recentPicks() : [];
+  $("#sheet").innerHTML = `<div class="grab"></div>
+  <div class="shead"><h3>${f.isNew ? "เพิ่มรายการ" : "แก้ไขรายการ"}</h3><button class="iconbtn" id="close" aria-label="ปิด">✕</button></div>
+  <div class="amount"><span>฿</span><input id="amt" inputmode="decimal" placeholder="0" value="${esc(f.amount)}" autocomplete="off"></div>
+  ${picks.length ? `<div class="recent">${picks.map((e, i) => `<button data-pick-recent="${i}">${catOf(e.cat).icon} ${esc(e.cat)}${e.sub ? ` ${esc(e.sub)}` : ""}${e.note ? ` · ${esc(e.note.slice(0, 14))}` : ""}<br><b class="num">${money(e.amount)}</b></button>`).join("")}</div>` : ""}
+  <label class="lbl">หมวด</label>
+  <div class="cgrid">${CATS.map(x => `<button class="${f.cat === x.name ? "on" : ""}" data-fcat-pick="${x.name}">${icon(x)}${x.name}</button>`).join("")}</div>
+  ${c?.subs ? `<label class="lbl">ชนิด</label><div class="seg">${c.subs.map(s => `<button class="${f.sub === s ? "on" : ""}" data-sub="${s}">${s === "เปียก" ? "💧 " : "🧻 "}${s}</button>`).join("")}</div>` : ""}
+  <div class="row2"><div><label class="lbl">วันที่ซื้อ</label><input class="field" id="date" type="date" value="${esc(f.date)}" max="${today()}"></div>
+    <div><label class="lbl">จำนวน (ไม่ใส่ก็ได้)</label><input class="field" id="qty" inputmode="numeric" placeholder="เช่น 2" value="${esc(f.qty || "")}"></div></div>
+  <label class="lbl">${f.cat === "อื่นๆ" ? "ซื้ออะไร" : "หมายเหตุ (ยี่ห้อ / ร้าน)"}</label>
+  <input class="field" id="note" placeholder="${f.cat === "อื่นๆ" ? "เช่น ของเล่น เสื้อผ้า ค่าหมอ" : "เช่น S-26 จาก Lotus's"}" value="${esc(f.note)}">
+  <label class="lbl">ใครจ่าย / ใครบันทึก</label>
+  <div class="seg">${["พ่อ", "แม่"].map(b => `<button class="${f.by === b ? "on" : ""}" data-by="${b}">${b === "พ่อ" ? "👨" : "👩"} ${b}</button>`).join("")}</div>
+  <div class="err" id="ferr"></div>
+  <button class="btn" id="save">${f.isNew ? "บันทึก" : "บันทึกการแก้ไข"}</button>
+  ${f.isNew ? "" : `<button class="btn danger" id="del">ลบรายการนี้</button>`}`;
+  fitAmount();
+}
+function readForm() {
+  form.amount = $("#amt").value.replace(/[^\d.]/g, "");
+  form.date = $("#date").value || today();
+  form.qty = $("#qty").value.replace(/[^\d.]/g, "");
+  form.note = $("#note").value.trim();
+}
+function saveForm() {
+  readForm();
+  const f = form, amt = Number(f.amount), err = m => { $("#ferr").textContent = m; };
+  if (!(amt > 0)) return err("ใส่จำนวนเงินก่อนนะคะ");
+  if (!f.cat) return err("เลือกหมวดก่อนนะคะ");
+  if (CAT[f.cat].subs && !f.sub) return err("เลือกว่าเป็นทิชชูเปียกหรือแห้ง");
+  if (f.cat === "อื่นๆ" && !f.note) return err("พิมพ์สั้น ๆ ว่าซื้ออะไร");
+  const now = Date.now();
+  const entry = { id: f.id, date: f.date, cat: f.cat, sub: CAT[f.cat].subs ? f.sub : "", amount: amt, qty: Number(f.qty) || 0,
+    note: f.note, by: f.by || cfg.me, createdAt: f.createdAt || now, updatedAt: now };
+  const wasNew = f.isNew;
+  closeSheet();
+  if (ym(entry.date) !== month && tab === "home") month = ym(entry.date);
+  change({ op: "upsert", entry });
+  toast(wasNew ? "บันทึกแล้ว ✓" : "แก้ไขแล้ว ✓");
+}
+
+// ---------- events ----------
+document.addEventListener("click", async ev => {
+  const t = ev.target.closest("button, .backdrop");
+  if (!t) return;
+  const d = t.dataset;
+  if (t.id === "backdrop" || t.id === "close") return closeSheet();
+  if (t.id === "addBtn") return openSheet();
+  if (d.tab) return go(d.tab);
+  if (d.pick) { cfg.me = d.pick; if (pendingJoin) { const ok = await join(pendingJoin); pendingJoin = null; toast(ok ? "เชื่อมข้อมูลกับอีกเครื่องแล้ว ✓" : "เชื่อมต่อไม่สำเร็จ ลองใหม่ในหน้าตั้งค่า"); } persist(); return render(); }
+  if (d.m) { month = addMonth(month, Number(d.m)); return render(); }
+  if (d.cat) { filt = { q: "", cat: d.cat, by: "" }; return go("history"); }
+  if (d.go) { month = d.go; return go("home"); }
+  if (d.edit) { const e = entries().find(x => x.id === d.edit); return e && openSheet(e); }
+  if (d.fcat !== undefined) { filt.cat = d.fcat; return render(); }
+  if (d.fby !== undefined) { filt.by = d.fby; return render(); }
+  if (d.me) { cfg.me = d.me; persist(); return render(); }
+  // sheet
+  if (d.fcatPick) { readForm(); form.cat = d.fcatPick; if (!CAT[form.cat].subs) form.sub = ""; drawSheet(); return; }
+  if (d.sub) { readForm(); form.sub = d.sub; drawSheet(); return; }
+  if (d.by) { readForm(); form.by = d.by; drawSheet(); return; }
+  if (d.pickRecent !== undefined) {
+    const e = recentPicks()[Number(d.pickRecent)];
+    readForm(); Object.assign(form, { cat: e.cat, sub: e.sub, amount: String(e.amount), note: e.note, qty: e.qty || "" }); drawSheet(); return;
+  }
+  if (t.id === "save") return saveForm();
+  if (t.id === "del") {
+    if (!confirm("ลบรายการนี้ใช่ไหม? อีกเครื่องจะหายไปด้วย")) return;
+    const id = form.id; closeSheet(); change({ op: "delete", id }); return toast("ลบแล้ว");
+  }
+  // settings
+  if (t.id === "connect") {
+    const url = $("#url").value.trim(), pin = $("#pin").value.trim();
+    if (!/^https:\/\/script\.google(usercontent)?\.com\/.+/.test(url)) return $("#cerr").textContent = "ลิงก์ต้องขึ้นต้นด้วย https://script.google.com/";
+    if (!pin) return $("#cerr").textContent = "ใส่รหัสครอบครัวด้วย";
+    t.disabled = true; t.textContent = "กำลังเชื่อมต่อ…";
+    const ok = await join({ url, pin });
+    if (ok) toast("เชื่อมต่อสำเร็จ ✓"); else { const e = $("#cerr"); if (e) e.textContent = syncErr; }
+    return;
+  }
+  if (t.id === "syncNow") { await sync(); return toast(syncState === "ok" ? "ซิงก์แล้ว ✓" : "ซิงก์ไม่สำเร็จ"); }
+  if (t.id === "share") {
+    const link = $("#joinLink").value, text = "ติดตั้งแอปค่าใช้จ่ายจิณณ์อา: เปิดลิงก์นี้ใน Safari แล้วกด แชร์ → เพิ่มไปยังหน้าจอโฮม";
+    try { if (navigator.share) return await navigator.share({ title: "ค่าใช้จ่ายจิณณ์อา", text, url: link }); } catch { return; }
+    try { await navigator.clipboard.writeText(link); toast("คัดลอกลิงก์แล้ว ส่งทาง LINE ได้เลย"); } catch { prompt("คัดลอกลิงก์นี้", link); }
+    return;
+  }
+  if (t.id === "disconnect") {
+    if (!confirm("เลิกเชื่อมต่อ? ข้อมูลที่มีจะเก็บไว้ในเครื่องนี้ แต่จะไม่อัปเดตจากอีกเครื่องแล้ว")) return;
+    cache = entries().map(({ _pending, ...e }) => e); outbox = []; cfg.url = ""; cfg.pin = ""; persist(); return render();
+  }
+  if (t.id === "csv") return exportCsv();
+  if (t.id === "pickPhoto") return $("#photoIn").click();
+  if (t.id === "resetPhoto") { LS.set("photo", ""); return render(); }
+});
+// shrink the chosen photo to a 480px square so it fits comfortably in local storage
+document.addEventListener("change", ev => {
+  if (ev.target.id !== "photoIn" || !ev.target.files[0]) return;
+  const img = new Image();
+  img.onload = () => {
+    const n = Math.min(img.width, img.height), c = document.createElement("canvas");
+    c.width = c.height = 480;
+    c.getContext("2d").drawImage(img, (img.width - n) / 2, (img.height - n) / 2.6, n, n, 0, 0, 480, 480);
+    LS.set("photo", c.toDataURL("image/jpeg", .85)); URL.revokeObjectURL(img.src); render(); toast("เปลี่ยนรูปแล้ว 💗");
+  };
+  img.src = URL.createObjectURL(ev.target.files[0]);
+});
+const fitAmount = () => { const a = $("#amt"); if (a) a.style.width = Math.max(1, a.value.length) + 0.6 + "ch"; };
+document.addEventListener("input", ev => { if (ev.target.id === "amt") fitAmount(); if (ev.target.id === "q") { filt.q = ev.target.value; render(); } });
+document.addEventListener("keydown", ev => { if (ev.key === "Enter" && form && ev.target.matches("#amt,#note,#qty")) { ev.preventDefault(); saveForm(); } });
+
+// switching to shared mode: anything recorded locally goes up to the shared sheet
+async function join({ url, pin }) {
+  if (!shared()) { outbox = [...cache.map(e => ({ op: "upsert", entry: e })), ...outbox]; cache = []; }
+  cfg.url = url; cfg.pin = pin; persist();
+  const ok = await sync();
+  if (!ok) { cache = entries().map(({ _pending, ...e }) => e); outbox = []; cfg.url = ""; cfg.pin = ""; persist(); render(); }
+  return ok;
+}
+
+function exportCsv() {
+  const rows = [["วันที่", "หมวด", "ชนิด", "จำนวนเงิน", "จำนวน", "หมายเหตุ", "ผู้บันทึก"],
+    ...entries().map(e => [e.date, e.cat, e.sub, e.amount, e.qty || "", e.note, e.by])];
+  const csv = "﻿" + rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  a.download = `ค่าใช้จ่ายจิณณ์อา_${today()}.csv`; a.click();
+}
+
+// ---------- start ----------
+let pendingJoin = null;
+{
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.get("u") && h.get("p")) {
+    pendingJoin = { url: h.get("u"), pin: h.get("p") };
+    history.replaceState(null, "", location.pathname);
+    if (cfg.me && !shared()) join(pendingJoin).then(ok => toast(ok ? "เชื่อมข้อมูลกับอีกเครื่องแล้ว ✓" : "เชื่อมต่อไม่สำเร็จ"));
+    if (shared()) pendingJoin = null;
+  }
+}
+if (DEMO && !cache.length) {
+  cfg = { me: "แม่", url: "", pin: "" };
+  const plan = [["นม", "", 890, "S-26 Gold สูตร 3"], ["แพมเพิส", "", 459, "MamyPoko L"], ["ทิชชู", "เปียก", 129, "Pigeon แพ็ก 3"],
+    ["ทิชชู", "แห้ง", 89, ""], ["ครีมทาผิว", "", 259, "Cetaphil Baby"], ["ครีมอาบน้ำ", "", 199, "Johnson's"],
+    ["อาหารเสริม", "", 350, "วิตามินรวม"], ["ขนม", "", 65, "พัฟข้าวกล้อง"], ["อื่นๆ", "", 390, "ชุดนอน"]];
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const now = new Date();
+  for (let k = 13; k >= 0; k--) {
+    const base = new Date(now.getFullYear(), now.getMonth() - k, 1);
+    const days = k === 0 ? now.getDate() : new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
+    const n = k === 0 ? 11 : 10 + Math.floor(rnd() * 8);
+    for (let i = 0; i < n; i++) {
+      const p = plan[i < 4 ? i : Math.floor(rnd() * plan.length)];
+      const d = new Date(base.getFullYear(), base.getMonth(), 1 + Math.floor(rnd() * days));
+      cache.push({ id: uid() + i + k, date: ymd(d), cat: p[0], sub: p[1], amount: p[2] + Math.round(rnd() * 3) * 10 * (p[2] > 300 ? 1 : 0),
+        qty: p[0] === "แพมเพิส" ? 1 : 0, note: p[3], by: rnd() > .45 ? "แม่" : "พ่อ", createdAt: d.getTime(), updatedAt: d.getTime() });
+    }
+  }
+  persist();
+}
+document.addEventListener("touchstart", () => {}, { passive: true }); // lets :active styles show on iPhone
+render();
+sync();
+setInterval(() => { if (document.visibilityState === "visible" && !form) sync(); }, 30000);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") sync(); });
+window.addEventListener("online", sync);
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
